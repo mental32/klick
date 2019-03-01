@@ -3,6 +3,18 @@
 
 use core::panic::PanicInfo;
 
+use lazy_static::lazy_static;
+use spin::Mutex;
+
+pub mod macros;
+pub mod utils;
+
+use utils::WriteOnceBitField;
+
+lazy_static! {
+    pub static ref KFLAGS: Mutex<u32> = { Mutex::new(0) };
+}
+
 pub mod arch;
 
 use arch::vga::{Color, Character};
