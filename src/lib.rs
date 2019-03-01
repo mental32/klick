@@ -18,7 +18,7 @@ pub extern fn kmain() -> ! {
 #[panic_handler]
 fn panic(info: &PanicInfo) -> ! {
     printfill!(Character::as_whitespace(Color::White, Color::Blue), true);
-    println!("{:#?}", info);
+    printat!(0, 0, "{:#?}", info);
     hlt!()
 }
 
