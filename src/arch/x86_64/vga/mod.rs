@@ -53,7 +53,7 @@ macro_rules! printfill {
         writer.fill($char);
 
         if $persist {
-            writer.set_attribute($char.attr);
+            writer.attr = $char.attr;
         }
     });
 }

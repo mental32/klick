@@ -39,9 +39,9 @@ struct Buffer {
 }
 
 pub struct Writer {
-    col: usize,
-    row: usize,
-    attr: Attribute,
+    pub col: usize,
+    pub row: usize,
+    pub attr: Attribute,
     buffer: &'static mut Buffer,
 }
 
@@ -60,10 +60,6 @@ impl Writer {
             attr: Attribute::default(),
             buffer: unsafe { &mut *(0xb8000 as *mut Buffer) }
         }
-    }
-
-    pub fn set_attribute(&mut self, attr: Attribute) {
-        self.attr = attr;
     }
 
     pub fn write(&mut self, byte: u8) {
