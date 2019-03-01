@@ -13,11 +13,29 @@ also it takes both a Unix "everything is a file" and a Redox "everything is a UR
 
 The following are required to compile and run the kernel
 
+ - Rust (nightly)
+
+```bash
+# Install Rust
+curl https://sh.rustup.rs -sSf | sh
+
+# We need to be using the nightly toolchain.
+rustup override set nightly
+```
+
  - GRUB
  - Xorriso
  - Qemu/Bochs
  - Xargo
  - NASM
+
+```bash
+# Install rust-src and xargo for cross-compilation.
+rustup component add rust-src && cargo install xargo
+
+# Install dependencies from package manager.
+sudo pacman -S make qemu xorriso grub nasm mtools
+```
 
 ### Make
 
@@ -39,7 +57,7 @@ The Makefile should handle most if not all of the work needed to compile.
 
 #### Meta
 
- - [ ] \(C\)Make system (or any build system)
+ - [x] \(C\)Make system (or any build system)
  - [ ] Documentation
  - [ ] Book
 
@@ -47,16 +65,16 @@ The Makefile should handle most if not all of the work needed to compile.
 
  - [ ] target ARM systems
  - [ ] target x86 systems
- - [ ] target x86_64 systems
+ - [x] target x86_64 systems
 
 #### Bootstrap
 
- - [ ] Setup stack
- - [ ] Check Multiboot & store Multiboot information structure
- - [ ] Check CPUID
- - [ ] Enable Paging
- - [ ] Enable Long mode
- - [ ] Load GDT (static entries)
+ - [x] Setup stack
+ - [x] Check Multiboot & store Multiboot information structure
+ - [x] Check CPUID
+ - [x] Enable Paging
+ - [x] Enable Long mode
+ - [x] Load GDT (static entries)
  - [ ] Load IDT, map basic exception handlers
 
 #### Runtime
@@ -69,7 +87,7 @@ The Makefile should handle most if not all of the work needed to compile.
 
 #### Drivers
 
- - [ ] VGA Mode
+ - [x] VGA Mode
  - [ ] VESA Mode
  - [ ] FAT 16/32
  - [ ] EXT 2/3/4
