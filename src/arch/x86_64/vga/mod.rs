@@ -1,4 +1,6 @@
 use core::fmt;
+use core::fmt::Write;
+
 use lazy_static::lazy_static;
 use x86_64::instructions::interrupts;
 use spin::Mutex;
@@ -19,10 +21,26 @@ lazy_static! {
 
 #[doc(hidden)]
 pub fn _print(args: fmt::Arguments) {
-    use core::fmt::Write;
-
     interrupts::without_interrupts(|| {
         WRITER.lock().write_fmt(args).unwrap();
+    });
+}
+
+#[doc(hidden)]
+pub fn _print_at(col: usize, row: usize, args: fmt::Arguments) {
+    interrupts::without_interrupts(|| {
+        let mut writer = WRITER.lock();
+
+        let _col = writer.col;
+        let _row = writer.row;
+
+        writer.col = col;
+        writer.row = row;
+
+        writer.write_fmt(args).unwrap();
+
+        writer.col = _col;
+        writer.row = _row;
     });
 }
 
@@ -33,7 +51,7 @@ macro_rules! print {
 
 #[macro_export]
 macro_rules! printat {
-    ($($arg:tt)*) => ($crate::arch::vga::_print(format_args!($($arg)*)));
+    ($col:expr, $row:expr, $($arg:tt)*) => ($crate::arch::vga::_print_at($col, $row, format_args!($($arg)*)));
 }
 
 #[macro_export]
