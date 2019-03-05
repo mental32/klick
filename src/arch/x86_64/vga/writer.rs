@@ -66,9 +66,10 @@ impl Writer {
         match byte {
             b'\n' => {
 
-                if self.row == BUFFER_WIDTH - 1 {
+                if self.row == BUFFER_HEIGHT - 1 {
                     self.scroll();
-                    self.row = BUFFER_WIDTH - 1;
+                    self.clear_row(BUFFER_HEIGHT - 1);
+                    self.row = BUFFER_HEIGHT - 1;
                 } else {
                     self.row += 1;
                 }
@@ -77,10 +78,11 @@ impl Writer {
             },
 
             byte => {
-                if self.col + 1 == BUFFER_WIDTH - 1{
-                    if self.row == BUFFER_WIDTH - 1 {
+                if self.col == BUFFER_WIDTH {
+                    if self.row == BUFFER_HEIGHT - 1 {
                         self.scroll();
-                        self.row = BUFFER_WIDTH - 1;
+                        self.clear_row(BUFFER_HEIGHT - 1);
+                        self.row = BUFFER_HEIGHT - 1;
                     } else {
                         self.row += 1;
                     }
