@@ -30,9 +30,13 @@ section .text
 bits 32
 
 _start:
-    cmp eax, 0x2BADB002
+    cmp eax, 0x36d76289
     jne .error
 
+    ; Keep the multiboot info ptr safe in edi
+    mov edi, ebx
+
+    ; Setup the stack
     mov esp, stack_top
 
     call _start.cpuid
