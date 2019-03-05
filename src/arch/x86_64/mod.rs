@@ -39,7 +39,10 @@ pub fn init(multiboot_addr: usize) -> Result<(), &'static str> {
             // Enable write protect bit
             Cr0::update(|flags| {
                 flags.toggle(Cr0Flags::WRITE_PROTECT);
-            })
+            });
+
+            debug!("EFER = {:#?}", Efer::read());
+            debug!("CR0 = {:#?}", Cr0::read());
         }
     });
 

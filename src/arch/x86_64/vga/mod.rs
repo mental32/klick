@@ -55,6 +55,24 @@ macro_rules! printat {
 }
 
 #[macro_export]
+macro_rules! log {
+    ($msg:expr, $($arg:tt)*) => ({
+        print!("[ {} ] ", $msg);
+        print!("{}\n", format_args!($($arg)*));
+    });
+}
+
+#[macro_export]
+macro_rules! info {
+    ($($arg:tt)*) => (log!("INFO", $($arg)*));
+}
+
+#[macro_export]
+macro_rules! debug {
+    ($($arg:tt)*) => (log!("DEBUG", $($arg)*));
+}
+
+#[macro_export]
 macro_rules! println {
     () => (print!("\n"));
     ($($arg:tt)*) => (print!("{}\n", format_args!($($arg)*)));
