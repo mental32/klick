@@ -1,6 +1,7 @@
 #![feature(lang_items)]
 #![no_std]
 
+extern crate multiboot2;
 use core::panic::PanicInfo;
 
 use lazy_static::lazy_static;
@@ -8,8 +9,7 @@ use spin::Mutex;
 
 pub mod macros;
 pub mod utils;
-
-use utils::WriteOnceBitField;
+pub mod arch;
 
 lazy_static! {
     pub static ref KFLAGS: Mutex<u32> = { Mutex::new(0) };
@@ -20,9 +20,9 @@ pub mod arch;
 use arch::vga::{Color, Character};
 
 #[no_mangle]
-pub extern fn kmain() -> ! {
+pub extern "C" fn kmain(multiboot_addr: usize) -> ! {
 
-    arch::init().unwrap();
+    arch::init(multiboot_addr).unwrap();
 
     hlt!()
 }
