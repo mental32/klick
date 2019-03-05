@@ -14,3 +14,11 @@ macro_rules! kflagcanary {
 		(*$crate::KFLAGS.lock()).canary().unwrap()
 	})
 }
+
+#[macro_export]
+macro_rules! kflagset {
+	($error:expr) => ({
+		let canary = $crate::kflagcanary!();
+		$crate::kflag!(canary, $error);
+	})
+}
