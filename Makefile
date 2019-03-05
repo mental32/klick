@@ -4,7 +4,7 @@ NASM = nasm
 LD   = ld
 
 arch   ?= x86_64
-target ?= common/target-$(arch)
+target ?= target-$(arch)
 
 iso     := build/klick-$(arch).iso
 kernel  := build/klick-$(arch).bin
@@ -41,7 +41,9 @@ $(kernel): kernel $(rust_os) $(assembly_object_files)
 		$(assembly_object_files) $(rust_os)
 
 kernel:
-	@RUST_TARGET_PATH="$(shell pwd)" xargo build --target $(target) $(CARGOFLAGS)
+	@cp common/$(target).json $(target).json
+	@RUST_TARGET_PATH="$(shell pwd)" xargo build --target $(target)
+	@rm $(target).json
 
 # compile assembly files
 build/arch/$(arch)/%.o: src/arch/$(arch)/%.asm
