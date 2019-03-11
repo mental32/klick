@@ -26,7 +26,7 @@ pub fn init(multiboot_addr: usize) -> Result<(), &'static str> {
     // Clear the screen
     printfill!(Character::as_default_whitespace());
 
-    println!("[ OK ] Begin initialization...");
+    log!("[ OK ] Begin initialization...");
 
     without_interrupts(|| {
         // Setup the Multiboot1 struct
@@ -41,12 +41,17 @@ pub fn init(multiboot_addr: usize) -> Result<(), &'static str> {
                 flags.toggle(Cr0Flags::WRITE_PROTECT);
             });
 
-            debug!("EFER = {:#?}", Efer::read());
-            debug!("CR0 = {:#?}", Cr0::read());
+            llinc!();
+
+            log!("CR0 = {:#?}", Cr0::read());
+            log!("EFER = {:#?}", Efer::read());
+
+            lldec!();
+
         }
     });
 
-    println!("[ OK ] Completed initialization!");
+    log!("[ OK ] Completed initialization!");
 
     Ok(())
 }

@@ -1,5 +1,6 @@
 use core::fmt;
 use core::fmt::Write;
+pub use core::sync::atomic::{AtomicUsize, Ordering};
 
 use lazy_static::lazy_static;
 use x86_64::instructions::interrupts;
@@ -44,6 +45,8 @@ pub fn _print_at(col: usize, row: usize, args: fmt::Arguments) {
     });
 }
 
+pub static LOGLEVEL: AtomicUsize = AtomicUsize::new(0);
+
 #[macro_export]
 macro_rules! print {
     ($($arg:tt)*) => ($crate::arch::vga::_print(format_args!($($arg)*)));
@@ -55,22 +58,33 @@ macro_rules! printat {
 }
 
 #[macro_export]
+macro_rules! llinc {
+    () => ($crate::arch::vga::LOGLEVEL.fetch_add(1, $crate::arch::vga::Ordering::SeqCst);)
+}
+
+
+#[macro_export]
+macro_rules! lldec {
+    () => ($crate::arch::vga::LOGLEVEL.fetch_sub(1, $crate::arch::vga::Ordering::SeqCst);)
+}
+
+
+#[macro_export]
 macro_rules! log {
-    ($msg:expr, $($arg:tt)*) => ({
-        print!("[ {} ] ", $msg);
+    ($($arg:tt)+) => ({
+        let level = $crate::arch::vga::LOGLEVEL.load($crate::arch::vga::Ordering::SeqCst);
+
+        match level {
+            0 => {print!("=>");},
+            _ => {print!(" ->");},
+        }
+
+        print!(" ");
+
         print!("{}\n", format_args!($($arg)*));
-    });
+    })
 }
 
-#[macro_export]
-macro_rules! info {
-    ($($arg:tt)*) => (log!("INFO", $($arg)*));
-}
-
-#[macro_export]
-macro_rules! debug {
-    ($($arg:tt)*) => (log!("DEBUG", $($arg)*));
-}
 
 #[macro_export]
 macro_rules! println {
