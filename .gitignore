@@ -1,0 +1,12 @@
+*\.iso
+*\.elf
+*\.o
+*\.a
+*\.d
+
+# Ignore build files
+build/
+
+/target
+**/*.rs.bk
+Cargo.lock
