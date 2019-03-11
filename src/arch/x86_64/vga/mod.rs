@@ -1,6 +1,6 @@
 use core::fmt;
 use core::fmt::Write;
-pub use core::sync::atomic::{AtomicUsize, Ordering};
+use core::sync::atomic::AtomicUsize;
 
 use lazy_static::lazy_static;
 use x86_64::instructions::interrupts;
@@ -58,21 +58,20 @@ macro_rules! printat {
 }
 
 #[macro_export]
-macro_rules! llinc {
-    () => ($crate::arch::vga::LOGLEVEL.fetch_add(1, $crate::arch::vga::Ordering::SeqCst);)
+macro_rules! climb {
+    ($f:expr) => ({
+        use core::sync::atomic::Ordering;
+        $crate::arch::vga::LOGLEVEL.fetch_add(1, Ordering::SeqCst);
+        $crate::utils::wrap($f);
+        $crate::arch::vga::LOGLEVEL.fetch_sub(1, Ordering::SeqCst);
+    })
 }
-
-
-#[macro_export]
-macro_rules! lldec {
-    () => ($crate::arch::vga::LOGLEVEL.fetch_sub(1, $crate::arch::vga::Ordering::SeqCst);)
-}
-
 
 #[macro_export]
 macro_rules! log {
     ($($arg:tt)+) => ({
-        let level = $crate::arch::vga::LOGLEVEL.load($crate::arch::vga::Ordering::SeqCst);
+        use core::sync::atomic::Ordering;
+        let level = $crate::arch::vga::LOGLEVEL.load(Ordering::SeqCst);
 
         match level {
             0 => {print!("=>");},

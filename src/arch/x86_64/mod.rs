@@ -2,7 +2,7 @@
 pub mod vga;
 
 pub mod macros;
-pub mod interrupts;
+// pub mod interrupts;
 
 use x86_64::{
     registers::{
@@ -47,12 +47,13 @@ pub fn init(multiboot_addr: usize) -> Result<(), &'static str> {
                 flags.toggle(Cr0Flags::WRITE_PROTECT);
             });
 
-            llinc!();
+            climb!(|| {
+                log!("CR0 = {:#?}", Cr0::read());
+                log!("EFER = {:#?}", Efer::read());
+            });
+        }
 
-            log!("CR0 = {:#?}", Cr0::read());
-            log!("EFER = {:#?}", Efer::read());
-
-            lldec!();
+        // interrupts::init(&mut {
 
         }
     });
