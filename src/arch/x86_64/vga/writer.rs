@@ -1,4 +1,5 @@
 use core::fmt;
+use core::default;
 use volatile::Volatile;
 
 use super::{Attribute, Color};
@@ -49,6 +50,12 @@ impl fmt::Write for Writer {
     fn write_str(&mut self, s: &str) -> fmt::Result {
         self.write_str(s);
         Ok(())
+    }
+}
+
+impl default::Default for Writer {
+    fn default() -> Self {
+        Self::new()
     }
 }
 
