@@ -30,7 +30,7 @@ pub fn init(multiboot_addr: usize) -> Result<(), &'static str> {
     kflag!(*KCANARY, "Attempted to initialize arch::x86_64 twice!");
 
     // Clear the screen
-    printfill!(Character::as_default_whitespace());
+    printfill!(Character::default_whitespace());
 
     log!("[ OK ] Begin initialization...");
 

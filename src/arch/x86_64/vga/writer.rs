@@ -19,14 +19,14 @@ impl Character {
         Self { data, attr }
     }
 
-    pub fn as_whitespace(foreground: Color, background: Color) -> Self {
+    pub fn whitespace(foreground: Color, background: Color) -> Self {
         Self {
             data: b' ',
             attr: Attribute::new(foreground, background)
         }
     }
 
-    pub fn as_default_whitespace() -> Self {
+    pub fn default_whitespace() -> Self {
         Self {
             data: b' ',
             attr: Attribute::default()

@@ -31,7 +31,7 @@ pub extern "C" fn kmain(multiboot_addr: usize) -> ! {
 
 #[panic_handler]
 fn panic(info: &PanicInfo) -> ! {
-    printfill!(Character::as_whitespace(Color::White, Color::Blue), true);
+    printfill!(Character::whitespace(Color::White, Color::Blue), true);
     printat!(0, 0, "{:#?}", info);
     hlt!()
 }
