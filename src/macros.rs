@@ -1,24 +1,14 @@
 
 #[macro_export]
 macro_rules! kflag {
-	($canary:expr, $error:expr) => ({
-		use $crate::utils::WriteOnceBitField;
-		if let Err(_) = (*$crate::KFLAGS.lock()).set($canary) { panic!($error) }
-	})
-}
-
-#[macro_export]
-macro_rules! kflagcanary {
 	() => ({
-		use $crate::utils::WriteOnceBitField;
-		(*$crate::KFLAGS.lock()).canary().unwrap()
-	})
-}
+		use core::sync::atomic::Ordering;
+		$crate::KFLAGS.load(Ordering::SeqCst)
+	});
 
-#[macro_export]
-macro_rules! kflagset {
-	($error:expr) => ({
-		let canary = $crate::kflagcanary!();
-		$crate::kflag!(canary, $error);
+	($canary:expr, $error:expr) => ({
+		use core::sync::atomic::Ordering;
+		if $canary < $crate::KFLAGS.load(Ordering::SeqCst) { panic!($error) }
+		$crate::KFLAGS.fetch_add(1, Ordering::SeqCst);
 	})
 }
