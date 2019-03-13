@@ -50,7 +50,7 @@ The Makefile should handle most if not all of the work needed to compile.
 
 > Until every item is checked I strongly suggest against using the kernel.
 >
-> I'll be probably be archived for educational purposes once "complete" anyway.
+> It'll be probably be archived for educational purposes once "complete" anyway.
 
 
 ### Kernel
