@@ -5,19 +5,18 @@ extern crate multiboot2;
 
 use core::panic::PanicInfo;
 
-
-use arch::vga::{Color, Character};
-
 pub mod macros;
 pub mod utils;
 pub mod arch;
+pub mod sys;
 
-
-pub mod arch;
-
-use arch::vga::{Color, Character};
 #[panic_handler]
 fn panic(info: &PanicInfo) -> ! {
+    use arch::vga::{
+        Color,
+        Character
+    };
+
     printfill!(Character::whitespace(Color::White, Color::Blue), true);
     printat!(0, 0, "{:#?}", info);
     hlt!()
