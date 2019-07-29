@@ -20,15 +20,6 @@ lazy_static! {
 pub mod arch;
 
 use arch::vga::{Color, Character};
-
-#[no_mangle]
-pub extern "C" fn kmain(multiboot_addr: usize) -> ! {
-
-    arch::init(multiboot_addr).unwrap();
-
-    hlt!()
-}
-
 #[panic_handler]
 fn panic(info: &PanicInfo) -> ! {
     printfill!(Character::whitespace(Color::White, Color::Blue), true);
