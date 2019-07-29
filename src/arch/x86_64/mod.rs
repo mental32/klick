@@ -18,17 +18,7 @@ use x86_64::{
 
 use vga::Character;
 
-use crate::kflag;
-
-use lazy_static::lazy_static;
-
-lazy_static! {
-    static ref KCANARY: usize = { kflag!() };
-}
-
 pub fn init(multiboot_addr: usize) -> Result<(), &'static str> {
-    kflag!(*KCANARY, "Attempted to initialize arch::x86_64 twice!");
-
     // Clear the screen
     printfill!(Character::default_whitespace());
 

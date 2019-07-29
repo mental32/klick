@@ -2,10 +2,9 @@
 #![no_std]
 
 extern crate multiboot2;
-use core::panic::PanicInfo;
-use core::sync::atomic::AtomicUsize;
 
-use lazy_static::lazy_static;
+use core::panic::PanicInfo;
+
 
 use arch::vga::{Color, Character};
 
@@ -13,9 +12,6 @@ pub mod macros;
 pub mod utils;
 pub mod arch;
 
-lazy_static! {
-    pub static ref KFLAGS: AtomicUsize = AtomicUsize::new(0);
-}
 
 pub mod arch;
 
